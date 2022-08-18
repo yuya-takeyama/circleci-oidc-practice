@@ -20,6 +20,7 @@ jobs:
       - run:
           name: Google Authentication
           command: |
+            echo $CIRCLE_OIDC_TOKEN
             ACCESS_TOKEN=`curl -X POST -s \
                 -H "Content-Type: application/json; charset=utf-8" \
                 -d "{
@@ -41,7 +42,6 @@ jobs:
                 }" \
                 "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/circleci@jp-yuyat-circleci-oidc-test.iam.gserviceaccount.com:generateAccessToken" | jq -r .accessToken`
             echo $SA_ACCESS_TOKEN | docker login -u oauth2accesstoken --password-stdin https://asia-northeast1-docker.pkg.dev
-            echo $CIRCLE_OIDC_TOKEN
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
