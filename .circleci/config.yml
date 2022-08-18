@@ -17,6 +17,30 @@ jobs:
       - run:
           name: "Say hello"
           command: "echo Hello, World!"
+      - run:
+          name: Google Authentication
+          command: |
+            ACCESS_TOKEN=`curl -X POST -s \
+                -H "Content-Type: application/json; charset=utf-8" \
+                -d "{
+                    "audience": \"//iam.googleapis.com/projects/980904762643/locations/global/workloadIdentityPools/circleci-pool/providers/circleci-prvdr\",
+                    "grantType": \"urn:ietf:params:oauth:grant-type:token-exchange\",
+                    "requestedTokenType": \"urn:ietf:params:oauth:token-type:access_token\",
+                    "scope": \"https://www.googleapis.com/auth/cloud-platform\",
+                    "subjectTokenType": \"urn:ietf:params:oauth:token-type:jwt\",
+                    "subjectToken": \"${CIRCLE_OIDC_TOKEN}\"
+                }" \
+                "https://sts.googleapis.com/v1/token" | jq -r .access_token`
+            SA_ACCESS_TOKEN=`curl -X POST -s \
+                -H "Authorization: Bearer $ACCESS_TOKEN" \
+                -H "Content-Type: application/json; charset=utf-8" \
+                -d "{
+                    "scope": [
+                    \"https://www.googleapis.com/auth/cloud-platform\"
+                    ]
+                }" \
+                "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/circleci@jp-yuyat-circleci-oidc-test.iam.gserviceaccount.com:generateAccessToken" | jq -r .accessToken`
+            echo $SA_ACCESS_TOKEN | docker login -u oauth2accesstoken --password-stdin https://asia-east1-docker.pkg.dev
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
