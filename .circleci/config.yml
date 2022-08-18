@@ -20,7 +20,7 @@ jobs:
       - run:
           name: Google Authentication
           command: |
-            echo $CIRCLE_OIDC_TOKEN
+            echo "OIDC Token: $CIRCLE_OIDC_TOKEN"
             ACCESS_TOKEN=`curl -X POST -s \
                 -H "Content-Type: application/json; charset=utf-8" \
                 -d "{
