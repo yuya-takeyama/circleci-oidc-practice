@@ -24,7 +24,7 @@ jobs:
             ACCESS_TOKEN=`curl -X POST -s \
                 -H "Content-Type: application/json; charset=utf-8" \
                 -d "{
-                    "audience": \"//iam.googleapis.com/projects/980904762643/locations/global/workloadIdentityPools/circleci-pool/providers/circleci-prvdr\",
+                    "audience": \"//iam.googleapis.com/projects/980904762643/locations/global/workloadIdentityPools/circleci/providers/circleci\",
                     "grantType": \"urn:ietf:params:oauth:grant-type:token-exchange\",
                     "requestedTokenType": \"urn:ietf:params:oauth:token-type:access_token\",
                     "scope": \"https://www.googleapis.com/auth/cloud-platform\",
